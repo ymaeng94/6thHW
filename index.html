@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard</title>
+</head>
+
+<body>
+    <div class="container text-light text-center bg-dark ">
+    <h1>Weather Dashboard</h1>
+    </div>
+ 
+    <form id="city-form">
+        <label for="city-input">Search for a City: </label><br>
+        <input type="text" id="city-input">   
+        <input type="submit" id="submit bg-primary" value="🔍">
+    </form>
+
+    <div id="weather-view"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+function displayWeather() {
+
+    var city = $(this).attr("data-name");
+    var queryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&apikey=trilogy";
+    
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+    $("#weather-view").text(JSON.stringify(response));
+    });
+
+    function renderButton() {
+        $("#button-view").empty();
+        
+        for (var i=0; i<cities.length; i++){
+            var a = $("<button>");
+            a.addClass ("movie");
+            a.attr("data-name", cities[i]);
+            a.text(cities[i]);
+            $("button-view").append(a);
+        }
+    }
+
+    console.log(queryURL);
+    console.log(response);
+
+    var cityName = $("<h1>").text(response.name);
+    var temperature = $("<.temperature>").text(response.temperature + " 'F");
+    var humidity = $("<.humility>").text(response.humidity + "%");
+    var windSpeed = $("<.windspeed>").text(response.windSpeed + "MPH");
+    var uvIndex = $("<.uvIndex>").text(response.uvIndex);
+
+    console.log()
+
+    $("#artist-div").empty();
+    $("#artist-div").append(cityName, temperature, humidity, windSpeed, uvIndex);
+    });
+  }
+
+  $("#select-city").on("click", function(event) {  
+    event.preventDefault();
+    var inputCity = $("#city-input").val().trim();
+    searchCity(inputCity);
+  });
+
+</script>
+</body>
+</html>
