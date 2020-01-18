@@ -1,54 +1,56 @@
 
 
-
-var cities= ["Long Beach", "San Diego", "Los Angeles"];
-
+var cities= ["Long Beach", "Los Angeles"];
 
 
-function displayWeatherInfo () {
+$("#find-city").on("click", function(event){
+   
+    event.preventDefault();
+ console.log("first")
 
-    var city = $(this).attr("data-name");
     var APIKey = "364dfb422358dfd0400bcc8efaa97e2b";
-    var queryURL = "https;//api.openweathermap.org/data/2.5/forecast?q=" + city +"&appid=" + APIKey;
+    var city = $("#city-input").val();
+    console.log(city)
+    var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + APIKey;
     
-
-
 
     $.ajax({
         url: queryURL,
         method:"GET"
     }).then(function(response){
 
+    console.log(queryURL);
+    console.log(response);
+
+    
+
+    var weatherDiv = $("<div class='weather'>");
 
 
-    $("#cities-view").text(JSON.stringify(response));
+        var temperature = response.list[0].main.temp;
+        $("#temp").text("temperature is "+ temperature);
+        console.log("temp is :"+temperature)
 
 
-        var weatherDiv = $("<div class='weather'>");
+        var windSpeed = response.list[0].wind.speed;
+        console.log("windSpeed is :"+windSpeed)
+        $("#wind").text("wind speed is "+ windSpeed);
+        
 
-        var temperature = response.temperature;
-        var pOne = $("<p>").text("Temperature: " + temperature);
-        weatherDiv.append(pOne);
+        var windSpeed = response.list[0].main.humility;
+        console.log("humility is:" + humility)
+        $("#humility").text("humility is: "+ humility);
 
-        var humidity = response.humidity;
-        var pTwo = $("<p>").text("Humidity: " + humidity);
-        weatherDiv.append(pTwo);
 
-        var windSpeed = response.windSpeed;
-        var pThree = $("<p>").text("Wind speed: " + windSpeed);
-        weatherDiv.append(pThree);
-
+        var uvIndex = response.list[1].city.sunrise;
+        console.log("uv Index is: "+uvIndex)
+        $("#uvIndex").text(uvIndex);
 
     $("#cites-view").prepend(weatherDiv);
 
     });
 
-}
-
-
-
-
-
+});
 
 
 
@@ -57,7 +59,6 @@ function renderButtons() {
     $("#buttons-view").empty();
 
     for (var i = 0; i < cities.length; i++) {
-
       var a = $("<button>");  
       a.addClass("city");   
       a.attr("data-name", cities[i]);
@@ -69,27 +70,14 @@ function renderButtons() {
 
 
 
-
-
-
-
-
-$("#add-city").on("click",function(event) {
-
+$("#find-city").on("click",function(event) {
     event.preventDefault();
-    var movie = $("#city-input").val().trim();
+    var city= $("#city-input").val().trim();
     cities.push(city);
     renderButtons();
-
 });
 
 
-
-
-
-
-
-$(document).on("click", ".city", displayWeatherInfo);
 
 renderButtons();
 
